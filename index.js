@@ -80,11 +80,12 @@ client.on("voiceStateUpdate", (oldMember, newMember) => {
         .join()
         .then((connection) => {
           setTimeout(() => {
-            const dispatcher = connection.play(video, { volume: 1.0 });
-            dispatcher.on("finish", () => {
-              channel.leave();
-            });
+            let a = 0;
           }, 1000);
+          const dispatcher = connection.play(video, { volume: 1.0 });
+          dispatcher.on("finish", () => {
+            channel.leave();
+          });
         })
         .catch((e) => {
           console.error(e);
