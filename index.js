@@ -2,6 +2,17 @@ const dotenv = require("dotenv").config();
 const Discord = require("discord.js");
 const client = new Discord.Client();
 const ytdl = require("ytdl-core");
+const http = require("http");
+
+http
+  .createServer((req, res) => {
+    res.writeHead(200, {
+      "Content-type": "text/plain",
+    });
+    res.write("Hey");
+    res.end();
+  })
+  .listen(4000 || process.env.PORT);
 
 var isBotOn = [];
 
