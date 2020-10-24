@@ -99,7 +99,7 @@ client.on("voiceStateUpdate", (oldMember, newMember) => {
         greetingsUrl = "https://youtu.be/lxZKGlUkJyo";
         break;
       default:
-        "https://youtu.be/yhgSV9OgPJQ";
+        greetingsUrl = "https://youtu.be/yhgSV9OgPJQ";
     }
 
     const video = ytdl(greetingsUrl);
