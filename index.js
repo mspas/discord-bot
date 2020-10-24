@@ -33,10 +33,15 @@ client.on("message", (message) => {
       break;
     case "!plsgame":
       var voiceChannel = message.member.voice.channel;
+      if (!voiceChannel) return console.error("Channel does not exist!");
+      const video = ytdl("https://youtu.be/P-ciUlCLWM8");
+
       voiceChannel
         .join()
         .then((connection) => {
-          let video = "https://youtu.be/P-ciUlCLWM8";
+          setTimeout(() => {
+            let a = 0;
+          }, 500);
           const dispatche = connection.play(video, {
             volume: 1.0,
           });
@@ -106,13 +111,14 @@ client.on("voiceStateUpdate", (oldMember, newMember) => {
 
     if (oldUserChannel !== newUserChannel && newUserChannel) {
       const channel = client.channels.cache.get(newUserChannel);
-      if (!channel) return console.error("The channel does not exist!");
+      if (!channel) return console.error("Channel does not exist!");
+
       channel
         .join()
         .then((connection) => {
           setTimeout(() => {
             let a = 0;
-          }, 1000);
+          }, 500);
           const dispatcher = connection.play(video, { volume: 1.0 });
           dispatcher.on("finish", () => {
             channel.leave();
