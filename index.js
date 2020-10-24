@@ -31,6 +31,20 @@ client.on("message", (message) => {
       message.channel.send(`Wujek nie będzie witać!`);
       setBotActivity(message.member.guild.id, false);
       break;
+    case "!plsgame":
+      var voiceChannel = message.member.voice.channel;
+      voiceChannel
+        .join()
+        .then((connection) => {
+          let video = "https://youtu.be/P-ciUlCLWM8";
+          const dispatche = connection.play(video, {
+            volume: 1.0,
+          });
+          dispatche.on("finish", () => {
+            voiceChannel.leave();
+          });
+        })
+        .catch((err) => console.log(err));
     default:
       return true;
   }
@@ -62,14 +76,31 @@ const checkIfBotIsOn = (guildId) => {
 
 client.on("voiceStateUpdate", (oldMember, newMember) => {
   let isMyBotOn = checkIfBotIsOn(newMember.guild.id);
-  if (isMyBotOn) {
+  if (isMyBotOn && newMember.id !== "758674951321812992") {
     const newUserChannel = newMember.channelID;
     const oldUserChannel = oldMember.channelID;
 
-    const greetingsUrl =
-      newMember.id === "305704741667602443"
-        ? "https://youtu.be/dDnR-l6mQ9c"
-        : "https://youtu.be/yhgSV9OgPJQ"; //kwas
+    let greetingsUrl = "";
+
+    switch (newMember.id) {
+      case "305704741667602443": //kwas
+        greetingsUrl = "https://youtu.be/dDnR-l6mQ9c";
+        break;
+      case "286129252787552256": //skorpiak
+        greetingsUrl = "https://youtu.be/tC5MENXaGVs";
+        break;
+      case "305703298592145409": //gut
+        greetingsUrl = "https://youtu.be/M2sFwA2sTAQ";
+        break;
+      case "259060553018769409": //wynta
+        greetingsUrl = "https://youtu.be/MwAxBHVf8EM";
+        break;
+      case "305791906527445005": //frejn
+        greetingsUrl = "https://youtu.be/lxZKGlUkJyo";
+        break;
+      default:
+        "https://youtu.be/yhgSV9OgPJQ";
+    }
 
     const video = ytdl(greetingsUrl);
 
@@ -95,12 +126,3 @@ client.on("voiceStateUpdate", (oldMember, newMember) => {
 });
 
 client.login(process.env.BOT_TOKEN);
-
-/*if (
-  oldUserChannel !== newUserChannel &&
-  (newUserChannel === "700758865893130260" ||
-    newUserChannel === "377511754760192001" ||
-    newUserChannel === "378644418686877698")
-) */
-
-//if (oldUserChannel !== newUserChannel && newUserChannel === "758673613095174189")
