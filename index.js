@@ -22,6 +22,7 @@ client.once("ready", () => {
 
 client.on("message", (message) => {
   let text = message.content;
+  let video = "";
   switch (text) {
     case "!uncleon":
       message.channel.send(`Wujek przywita dla jego!`);
@@ -34,7 +35,7 @@ client.on("message", (message) => {
     case "!plsgame":
       var voiceChannel = message.member.voice.channel;
       if (!voiceChannel) return console.error("Channel does not exist!");
-      const video = ytdl("https://youtu.be/P-ciUlCLWM8");
+      video = ytdl("https://youtu.be/P-ciUlCLWM8");
 
       voiceChannel
         .join()
@@ -50,6 +51,28 @@ client.on("message", (message) => {
           });
         })
         .catch((err) => console.log(err));
+      break;
+    case "!plsmath":
+      var voiceChannel = message.member.voice.channel;
+      if (!voiceChannel)
+        voiceChannel = client.channels.cache.get("700758865893130260"); //asnee
+      video = ytdl("https://youtu.be/R07dzrNeHNU");
+
+      voiceChannel
+        .join()
+        .then((connection) => {
+          setTimeout(() => {
+            let a = 0;
+          }, 500);
+          const dispatche = connection.play(video, {
+            volume: 1.0,
+          });
+          dispatche.on("finish", () => {
+            voiceChannel.leave();
+          });
+        })
+        .catch((err) => console.log(err));
+      break;
     default:
       return true;
   }
