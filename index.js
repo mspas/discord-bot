@@ -43,12 +43,16 @@ client.on("message", (message) => {
           setTimeout(() => {
             let a = 0;
           }, 500);
-          const dispatche = connection.play(video, {
-            volume: 1.0,
-          });
-          dispatche.on("finish", () => {
-            voiceChannel.leave();
-          });
+          try {
+            const dispatche = connection.play(video, {
+              volume: 1.0,
+            });
+            dispatche.on("finish", () => {
+              voiceChannel.leave();
+            });
+          } catch (error) {
+            console.log(error);
+          }
         })
         .catch((err) => console.log(err));
       break;
@@ -64,12 +68,16 @@ client.on("message", (message) => {
           setTimeout(() => {
             let a = 0;
           }, 500);
-          const dispatche = connection.play(video, {
-            volume: 1.0,
-          });
-          dispatche.on("finish", () => {
-            voiceChannel.leave();
-          });
+          try {
+            const dispatche = connection.play(video, {
+              volume: 1.0,
+            });
+            dispatche.on("finish", () => {
+              voiceChannel.leave();
+            });
+          } catch (error) {
+            console.log(error);
+          }
         })
         .catch((err) => console.log(err));
       break;
@@ -109,7 +117,7 @@ client.on("voiceStateUpdate", (oldMember, newMember) => {
     const oldUserChannel = oldMember.channelID;
 
     let greetingsUrl = "";
-
+    console.log(newMember.id);
     switch (newMember.id) {
       case "305704741667602443": //kwas
         greetingsUrl = "https://youtu.be/dDnR-l6mQ9c";
@@ -127,7 +135,9 @@ client.on("voiceStateUpdate", (oldMember, newMember) => {
         greetingsUrl = "https://youtu.be/lxZKGlUkJyo";
         break;
       default:
+        console.log("di[a");
         greetingsUrl = "https://youtu.be/yhgSV9OgPJQ";
+        break;
     }
 
     const video = ytdl(greetingsUrl);
@@ -142,10 +152,14 @@ client.on("voiceStateUpdate", (oldMember, newMember) => {
           setTimeout(() => {
             let a = 0;
           }, 500);
-          const dispatcher = connection.play(video, { volume: 1.0 });
-          dispatcher.on("finish", () => {
-            channel.leave();
-          });
+          try {
+            const dispatcher = connection.play(video, { volume: 1.0 });
+            dispatcher.on("finish", () => {
+              channel.leave();
+            });
+          } catch (error) {
+            console.log(error);
+          }
         })
         .catch((e) => {
           console.error(e);
