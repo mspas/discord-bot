@@ -117,7 +117,6 @@ client.on("voiceStateUpdate", (oldMember, newMember) => {
     const oldUserChannel = oldMember.channelID;
 
     let greetingsUrl = "";
-    console.log(newMember.id);
     switch (newMember.id) {
       case "305704741667602443": //kwas
         greetingsUrl = "https://youtu.be/dDnR-l6mQ9c";
@@ -135,7 +134,6 @@ client.on("voiceStateUpdate", (oldMember, newMember) => {
         greetingsUrl = "https://youtu.be/lxZKGlUkJyo";
         break;
       default:
-        console.log("di[a");
         greetingsUrl = "https://youtu.be/yhgSV9OgPJQ";
         break;
     }
