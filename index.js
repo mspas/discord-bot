@@ -1,7 +1,7 @@
 const dotenv = require("dotenv").config();
 const Discord = require("discord.js");
 const client = new Discord.Client();
-const ytdl = require("ytdl-core");
+const ytdl = require("ytdl-core-discord");
 const http = require("http");
 
 http
@@ -60,18 +60,15 @@ client.on("message", (message) => {
       var voiceChannel = message.member.voice.channel;
       if (!voiceChannel)
         voiceChannel = client.channels.cache.get("700758865893130260"); //asnee
-      video = ytdl("https://youtu.be/R07dzrNeHNU");
 
       voiceChannel
         .join()
-        .then((connection) => {
-          setTimeout(() => {
-            let a = 0;
-          }, 500);
+        .then(async (connection) => {
           try {
-            const dispatche = connection.play(video, {
-              volume: 1.0,
-            });
+            const dispatche = connection.play(
+              await ytdl("https://youtu.be/R07dzrNeHNU"),
+              { type: "opus" }
+            );
             dispatche.on("finish", () => {
               voiceChannel.leave();
             });
@@ -138,20 +135,17 @@ client.on("voiceStateUpdate", (oldMember, newMember) => {
         break;
     }
 
-    const video = ytdl(greetingsUrl);
-
     if (oldUserChannel !== newUserChannel && newUserChannel) {
       const channel = client.channels.cache.get(newUserChannel);
       if (!channel) return console.error("Channel does not exist!");
 
       channel
         .join()
-        .then((connection) => {
-          setTimeout(() => {
-            let a = 0;
-          }, 500);
+        .then(async (connection) => {
           try {
-            const dispatcher = connection.play(video, { volume: 1.0 });
+            const dispatcher = connection.play(await ytdl(greetingsUrl), {
+              type: "opus",
+            });
             dispatcher.on("finish", () => {
               channel.leave();
             });
