@@ -22,7 +22,6 @@ client.once("ready", () => {
 
 client.on("message", (message) => {
   let text = message.content;
-  let video = "";
   switch (text) {
     case "!uncleon":
       message.channel.send(`Wujek przywita dla jego!`);
@@ -35,18 +34,15 @@ client.on("message", (message) => {
     case "!plsgame":
       var voiceChannel = message.member.voice.channel;
       if (!voiceChannel) return console.error("Channel does not exist!");
-      video = ytdl("https://youtu.be/P-ciUlCLWM8");
 
       voiceChannel
         .join()
-        .then((connection) => {
-          setTimeout(() => {
-            let a = 0;
-          }, 500);
+        .then(async (connection) => {
           try {
-            const dispatche = connection.play(video, {
-              volume: 1.0,
-            });
+            const dispatche = connection.play(
+              await ytdl("https://youtu.be/P-ciUlCLWM8"),
+              { type: "opus" }
+            );
             dispatche.on("finish", () => {
               voiceChannel.leave();
             });
