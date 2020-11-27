@@ -39,13 +39,7 @@ client.on("message", (message) => {
         .join()
         .then(async (connection) => {
           try {
-            const dispatche = connection.play(
-              await ytdl("https://youtu.be/P-ciUlCLWM8"),
-              { type: "opus" }
-            );
-            dispatche.on("finish", () => {
-              voiceChannel.leave();
-            });
+            play(voiceChannel, connection, "https://youtu.be/P-ciUlCLWM8", 0);
           } catch (error) {
             console.log(error);
           }
@@ -61,13 +55,7 @@ client.on("message", (message) => {
         .join()
         .then(async (connection) => {
           try {
-            const dispatche = connection.play(
-              await ytdl("https://youtu.be/R07dzrNeHNU"),
-              { type: "opus" }
-            );
-            dispatche.on("finish", () => {
-              voiceChannel.leave();
-            });
+            play(voiceChannel, connection, "https://youtu.be/R07dzrNeHNU", 0);
           } catch (error) {
             console.log(error);
           }
@@ -139,12 +127,7 @@ client.on("voiceStateUpdate", (oldMember, newMember) => {
         .join()
         .then(async (connection) => {
           try {
-            const dispatcher = connection.play(await ytdl(greetingsUrl), {
-              type: "opus",
-            });
-            dispatcher.on("finish", () => {
-              channel.leave();
-            });
+            play(channel, connection, greetingsUrl, 0);
           } catch (error) {
             console.log(error);
           }
@@ -155,5 +138,23 @@ client.on("voiceStateUpdate", (oldMember, newMember) => {
     }
   }
 });
+
+const play = async (channel, connection, url, repeated) => {
+  const dispatcher = connection.play(await ytdl(url), {
+    type: "opus",
+  });
+
+  dispatcher.on("error", (err) => {
+    repeated = repeated || 0;
+    if (repeated > 4) {
+      channel.leave();
+    } else play(channel, connection, url, ++repeated);
+    console.log(err);
+  });
+
+  dispatcher.on("finish", () => {
+    channel.leave();
+  });
+};
 
 client.login(process.env.BOT_TOKEN);
