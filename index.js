@@ -1,7 +1,7 @@
 const dotenv = require("dotenv").config();
 const Discord = require("discord.js");
 const client = new Discord.Client();
-const ytdl = require("ytdl-core-discord");
+const ytdl = require("ytdl-core");
 const http = require("http");
 
 http
@@ -139,10 +139,8 @@ client.on("voiceStateUpdate", (oldMember, newMember) => {
   }
 });
 
-const play = async (channel, connection, url, repeated) => {
-  const dispatcher = connection.play(await ytdl(url), {
-    type: "opus",
-  });
+const play = (channel, connection, url, repeated) => {
+  const dispatcher = connection.play(ytdl(url));
 
   dispatcher.on("error", (err) => {
     repeated = repeated || 0;
