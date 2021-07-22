@@ -97,7 +97,7 @@ client.on("voiceStateUpdate", (oldMember, newMember) => {
     const newUserChannel = newMember.channelID;
     const oldUserChannel = oldMember.channelID;
 
-    let greetingsUrl = "";
+    /*let greetingsUrl = "";
     switch (newMember.id) {
       case "305704741667602443": //kwas
         greetingsUrl = "https://youtu.be/dDnR-l6mQ9c";
@@ -114,8 +114,47 @@ client.on("voiceStateUpdate", (oldMember, newMember) => {
       case "305791906527445005": //frejn
         greetingsUrl = "https://youtu.be/lxZKGlUkJyo";
         break;
+      case "369108237628473347": //ja
+        greetingsUrl = "https://youtu.be/lxZKGlUkJyo";
+        break;
       default:
         greetingsUrl = "https://youtu.be/yhgSV9OgPJQ";
+        break;
+    }*/
+
+    const rndInt = Math.floor(Math.random() * 6) + 1;
+    let audioUrl = "./assets/frajer.mp3";
+
+    switch (rndInt) {
+      case 1:
+        audioUrl = "./assets/floryda.mp3";
+        break;
+      case 2:
+        audioUrl = "./assets/frajer.mp3";
+        break;
+      case 3:
+        audioUrl = "./assets/guwno.mp3";
+        break;
+      case 4:
+        audioUrl = "./assets/murzyn.mp3";
+        break;
+      case 5:
+        audioUrl = "./assets/odmutuj.mp3";
+        break;
+      case 6:
+        audioUrl = "./assets/pedau.mp3";
+        break;
+      case 7:
+        audioUrl = "./assets/roketlig.mp3";
+        break;
+      case 8:
+        audioUrl = "./assets/uhuhu.mp3";
+        break;
+      case 9:
+        audioUrl = "./assets/witam.mp3";
+        break;
+      default:
+        audioUrl = "./assets/witam.mp3";
         break;
     }
 
@@ -127,7 +166,7 @@ client.on("voiceStateUpdate", (oldMember, newMember) => {
         .join()
         .then(async (connection) => {
           try {
-            play(channel, connection, greetingsUrl, 0);
+            play(channel, connection, audioUrl, 0);
           } catch (error) {
             console.log(error);
           }
@@ -139,16 +178,16 @@ client.on("voiceStateUpdate", (oldMember, newMember) => {
   }
 });
 
-const play = (channel, connection, url, repeated) => {
-  const dispatcher = connection.play(ytdl(url));
+const play = (channel, connection, audioUrl, repeated) => {
+  const dispatcher = connection.play(audioUrl, { volume: 0.5 });
 
-  dispatcher.on("error", (err) => {
+  /*dispatcher.on("error", (err) => {
     repeated = repeated || 0;
-    if (repeated > 4) {
+    if (repeated > 9) {
       channel.leave();
-    } else play(channel, connection, url, ++repeated);
+    } else play(channel, connection, broadcast, ++repeated);
     console.log(err);
-  });
+  });*/
 
   dispatcher.on("finish", () => {
     channel.leave();
