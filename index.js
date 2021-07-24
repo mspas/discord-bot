@@ -1,8 +1,20 @@
 const dotenv = require("dotenv").config();
 const Discord = require("discord.js");
 const client = new Discord.Client();
-const ytdl = require("ytdl-core");
+const path = require("path");
+const fs = require("fs");
 const http = require("http");
+
+let filesNames = [];
+const directoryPath = path.join(__dirname, "assets");
+fs.readdir(directoryPath, (err, files) => {
+  if (err) {
+    return console.log("Unable to scan directory: " + err);
+  }
+  files.forEach(function (file) {
+    filesNames.push(file);
+  });
+});
 
 http
   .createServer((req, res) => {
@@ -122,41 +134,8 @@ client.on("voiceStateUpdate", (oldMember, newMember) => {
         break;
     }*/
 
-    const rndInt = Math.floor(Math.random() * 6) + 1;
-    let audioUrl = "./assets/frajer.mp3";
-
-    switch (rndInt) {
-      case 1:
-        audioUrl = "./assets/floryda.mp3";
-        break;
-      case 2:
-        audioUrl = "./assets/frajer.mp3";
-        break;
-      case 3:
-        audioUrl = "./assets/guwno.mp3";
-        break;
-      case 4:
-        audioUrl = "./assets/murzyn.mp3";
-        break;
-      case 5:
-        audioUrl = "./assets/odmutuj.mp3";
-        break;
-      case 6:
-        audioUrl = "./assets/pedau.mp3";
-        break;
-      case 7:
-        audioUrl = "./assets/roketlig.mp3";
-        break;
-      case 8:
-        audioUrl = "./assets/uhuhu.mp3";
-        break;
-      case 9:
-        audioUrl = "./assets/witam.mp3";
-        break;
-      default:
-        audioUrl = "./assets/witam.mp3";
-        break;
-    }
+    const rndInt = Math.floor(Math.random() * 15);
+    let audioUrl = "./assets/" + filesNames[rndInt];
 
     if (oldUserChannel !== newUserChannel && newUserChannel) {
       const channel = client.channels.cache.get(newUserChannel);
