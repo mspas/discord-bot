@@ -134,7 +134,7 @@ client.on("voiceStateUpdate", (oldMember, newMember) => {
         break;
     }*/
 
-    const rndInt = Math.floor(Math.random() * 15);
+    const rndInt = Math.floor(Math.random() * (filesNames.length + 1));
     let audioUrl = "./assets/" + filesNames[rndInt];
 
     if (oldUserChannel !== newUserChannel && newUserChannel) {
