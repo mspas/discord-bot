@@ -43,7 +43,7 @@ client.on("message", (message) => {
       message.channel.send(`Wujek nie będzie witać!`);
       setBotActivity(message.member.guild.id, false);
       break;
-    case "!plsgame":
+    case "!plslost":
       var voiceChannel = message.member.voice.channel;
       if (!voiceChannel) return console.error("Channel does not exist!");
 
@@ -51,23 +51,22 @@ client.on("message", (message) => {
         .join()
         .then(async (connection) => {
           try {
-            play(voiceChannel, connection, "https://youtu.be/P-ciUlCLWM8", 0);
+            play(voiceChannel, connection, "./assets/lost.mp3", 0);
           } catch (error) {
             console.log(error);
           }
         })
         .catch((err) => console.log(err));
       break;
-    case "!plsmath":
+    case "!plsprzegryw":
       var voiceChannel = message.member.voice.channel;
-      if (!voiceChannel)
-        voiceChannel = client.channels.cache.get("700758865893130260"); //asnee
+      if (!voiceChannel) return console.error("Channel does not exist!");
 
       voiceChannel
         .join()
         .then(async (connection) => {
           try {
-            play(voiceChannel, connection, "https://youtu.be/R07dzrNeHNU", 0);
+            play(voiceChannel, connection, "./assets/przegryw.mp3", 0);
           } catch (error) {
             console.log(error);
           }
