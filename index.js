@@ -6,7 +6,7 @@ const fs = require("fs");
 const http = require("http");
 
 let filesNames = [];
-const directoryPath = path.join(__dirname, "assets");
+const directoryPath = path.join(__dirname, "assets/greetings");
 fs.readdir(directoryPath, (err, files) => {
   if (err) {
     return console.log("Unable to scan directory: " + err);
@@ -51,7 +51,7 @@ client.on("message", (message) => {
         .join()
         .then(async (connection) => {
           try {
-            play(voiceChannel, connection, "./assets/lost.mp3", 0);
+            play(voiceChannel, connection, "./assets/commands/lost.mp3", 0);
           } catch (error) {
             console.log(error);
           }
@@ -66,7 +66,22 @@ client.on("message", (message) => {
         .join()
         .then(async (connection) => {
           try {
-            play(voiceChannel, connection, "./assets/przegryw.mp3", 0);
+            play(voiceChannel, connection, "./assets/commands/przegryw.mp3", 0);
+          } catch (error) {
+            console.log(error);
+          }
+        })
+        .catch((err) => console.log(err));
+      break;
+    case "!plszero":
+      var voiceChannel = message.member.voice.channel;
+      if (!voiceChannel) return console.error("Channel does not exist!");
+
+      voiceChannel
+        .join()
+        .then(async (connection) => {
+          try {
+            play(voiceChannel, connection, "./assets/commands/zero.mp3", 0);
           } catch (error) {
             console.log(error);
           }
@@ -134,7 +149,7 @@ client.on("voiceStateUpdate", (oldMember, newMember) => {
     }*/
 
     const rndInt = Math.floor(Math.random() * (filesNames.length + 1));
-    let audioUrl = "./assets/" + filesNames[rndInt];
+    let audioUrl = "./assets/greetings/" + filesNames[rndInt];
 
     if (oldUserChannel !== newUserChannel && newUserChannel) {
       const channel = client.channels.cache.get(newUserChannel);
