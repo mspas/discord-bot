@@ -5,14 +5,27 @@ const path = require("path");
 const fs = require("fs");
 const http = require("http");
 
-let filesNames = [];
-const directoryPath = path.join(__dirname, "assets/greetings");
-fs.readdir(directoryPath, (err, files) => {
+let filesNamesGreetings = [];
+let filesNamesCommands = [];
+
+const directoryPathGreetings = path.join(__dirname, "assets/greetings");
+const directoryPathCommands = path.join(__dirname, "assets/commands");
+
+fs.readdir(directoryPathGreetings, (err, files) => {
   if (err) {
     return console.log("Unable to scan directory: " + err);
   }
   files.forEach(function (file) {
-    filesNames.push(file);
+    filesNamesGreetings.push(file);
+  });
+});
+
+fs.readdir(directoryPathCommands, (err, files) => {
+  if (err) {
+    return console.log("Unable to scan directory: " + err);
+  }
+  files.forEach(function (file) {
+    filesNamesCommands.push(file);
   });
 });
 
@@ -34,62 +47,51 @@ client.once("ready", () => {
 
 client.on("message", (message) => {
   let text = message.content;
-  switch (text) {
-    case "!uncleon":
-      message.channel.send(`Wujek przywita dla jego!`);
-      setBotActivity(message.member.guild.id, true);
-      break;
-    case "!uncleoff":
-      message.channel.send(`Wujek nie będzie witać!`);
-      setBotActivity(message.member.guild.id, false);
-      break;
-    case "!plslost":
-      var voiceChannel = message.member.voice.channel;
-      if (!voiceChannel) return console.error("Channel does not exist!");
+  let commandTypeCheck = new RegExp("^!pls[w*-]*").test(text);
 
-      voiceChannel
-        .join()
-        .then(async (connection) => {
-          try {
-            play(voiceChannel, connection, "./assets/commands/lost.mp3", 0);
-          } catch (error) {
-            console.log(error);
-          }
-        })
-        .catch((err) => console.log(err));
-      break;
-    case "!plsprzegryw":
-      var voiceChannel = message.member.voice.channel;
-      if (!voiceChannel) return console.error("Channel does not exist!");
+  if (commandTypeCheck) {
+    let fileName = text.slice(4) + ".mp3";
+    let isFileValid = false;
 
-      voiceChannel
-        .join()
-        .then(async (connection) => {
-          try {
-            play(voiceChannel, connection, "./assets/commands/przegryw.mp3", 0);
-          } catch (error) {
-            console.log(error);
-          }
-        })
-        .catch((err) => console.log(err));
-      break;
-    case "!plszero":
-      var voiceChannel = message.member.voice.channel;
-      if (!voiceChannel) return console.error("Channel does not exist!");
+    filesNamesCommands.forEach((file) => {
+      if (file === fileName) {
+        isFileValid = true;
 
-      voiceChannel
-        .join()
-        .then(async (connection) => {
-          try {
-            play(voiceChannel, connection, "./assets/commands/zero.mp3", 0);
-          } catch (error) {
-            console.log(error);
-          }
-        })
-        .catch((err) => console.log(err));
-      break;
-    default:
-      return true;
+        var voiceChannel = message.member.voice.channel;
+        if (!voiceChannel) return console.error("Channel does not exist!");
+
+        voiceChannel
+          .join()
+          .then(async (connection) => {
+            try {
+              play(
+                voiceChannel,
+                connection,
+                "./assets/commands/" + fileName,
+                0
+              );
+            } catch (error) {
+              console.log(error);
+            }
+          })
+          .catch((err) => console.log(err));
+      }
+    });
+
+    if (!isFileValid) message.channel.send(`Nie ma takiego tu tego dla jego!`);
+  } else {
+    switch (text) {
+      case "!uncleon":
+        message.channel.send(`Wujek przywita dla jego!`);
+        setBotActivity(message.member.guild.id, true);
+        break;
+      case "!uncleoff":
+        message.channel.send(`Wujek nie będzie witać!`);
+        setBotActivity(message.member.guild.id, false);
+        break;
+      default:
+        return true;
+    }
   }
 });
 
@@ -148,8 +150,8 @@ client.on("voiceStateUpdate", (oldMember, newMember) => {
         break;
     }*/
 
-    const rndInt = Math.floor(Math.random() * (filesNames.length + 1));
-    let audioUrl = "./assets/greetings/" + filesNames[rndInt];
+    const rndInt = Math.floor(Math.random() * (filesNamesGreetings.length + 1));
+    let audioDir = "./assets/greetings/" + filesNamesGreetings[rndInt];
 
     if (oldUserChannel !== newUserChannel && newUserChannel) {
       const channel = client.channels.cache.get(newUserChannel);
@@ -159,7 +161,7 @@ client.on("voiceStateUpdate", (oldMember, newMember) => {
         .join()
         .then(async (connection) => {
           try {
-            play(channel, connection, audioUrl, 0);
+            play(channel, connection, audioDir, 0);
           } catch (error) {
             console.log(error);
           }
@@ -171,8 +173,8 @@ client.on("voiceStateUpdate", (oldMember, newMember) => {
   }
 });
 
-const play = (channel, connection, audioUrl, repeated) => {
-  const dispatcher = connection.play(audioUrl, { volume: 0.5 });
+const play = (channel, connection, audioDir, repeated) => {
+  const dispatcher = connection.play(audioDir, { volume: 0.5 });
 
   /*dispatcher.on("error", (err) => {
     repeated = repeated || 0;
