@@ -50,7 +50,8 @@ client.on("message", (message) => {
   let commandTypeCheck = new RegExp("^!pls[w*-]*").test(text);
 
   if (commandTypeCheck) {
-    let fileName = text.slice(4) + ".mp3";
+    let arg = text.slice(4);
+    let fileName = arg + ".mp3";
     let isFileValid = false;
 
     filesNamesCommands.forEach((file) => {
@@ -76,9 +77,32 @@ client.on("message", (message) => {
           })
           .catch((err) => console.log(err));
       }
-    });
+      if (
+        filesNamesCommands.indexOf(file) === filesNamesCommands.length - 1 &&
+        !isFileValid
+      ) {
+        const channelId = arg;
+        const channel = client.channels.cache.get(channelId);
 
-    if (!isFileValid) message.channel.send(`Nie ma takiego tu tego dla jego!`);
+        if (!channel) {
+          message.channel.send(`Nie ma takiego tu tego dla jego!`);
+          return false;
+        }
+
+        channel
+          .join()
+          .then((connection) => {
+            try {
+              play(channel, connection, "./assets/commands/grasz.mp3", 0);
+            } catch (error) {
+              console.log(error);
+            }
+          })
+          .catch((e) => {
+            console.error(e);
+          });
+      }
+    });
   } else {
     switch (text) {
       case "!uncleon":
